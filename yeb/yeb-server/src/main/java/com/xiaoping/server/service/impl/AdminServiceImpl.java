@@ -1,5 +1,6 @@
 package com.xiaoping.server.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaoping.server.config.security.JwtTokenUtil;
 import com.xiaoping.server.mapper.AdminMapper;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -37,6 +39,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private AdminMapper adminMapper;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -49,7 +53,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      * @return
      */
     @Override
-    public RespBean login(String username, String password, HttpServletRequest request) {
+    public RespBean login(String username, String password, String code,HttpServletRequest request) {
+        //判断图形验证码
+        String captcha = (String) request.getSession().getAttribute("captcha");
+        if (StringUtils.isEmpty(code)||!captcha.equalsIgnoreCase(code)){
+            return RespBean.error("验证码输入错误，请重新输入");
+        }
+        request.getSession().removeAttribute("captcha");
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if(null == userDetails || !passwordEncoder.matches(password,userDetails.getPassword())){
             return RespBean.error("用户名或密码不正确");
@@ -69,5 +80,13 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         tokenMap.put("token",token);
         tokenMap.put("tokenHead",tokenHead);
         return RespBean.success("登录成功",tokenMap);
+    }
+
+    @Override
+    public Admin getAdminByUserName(String username) {
+        QueryWrapper<Admin> queryWrapper = new QueryWrapper<Admin>()
+                .eq("username",username)
+                .eq("enabled",true);
+        return adminMapper.selectOne(queryWrapper);
     }
 }

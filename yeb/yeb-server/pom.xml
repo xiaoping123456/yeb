@@ -52,12 +52,18 @@
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-swagger2</artifactId>
-      <version>2.7.0</version>
+      <version>2.9.2</version>
     </dependency>
     <dependency>
-      <groupId>com.fun90.webjars</groupId>
-      <artifactId>swagger-ui-bootstrap4</artifactId>
-      <version>1.0.1</version>
+      <groupId>com.github.xiaoymin</groupId>
+      <artifactId>swagger-bootstrap-ui</artifactId>
+      <version>1.9.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.axet</groupId>
+      <artifactId>kaptcha</artifactId>
+      <version>0.0.9</version>
     </dependency>
 
     <!--spring-security依赖-->

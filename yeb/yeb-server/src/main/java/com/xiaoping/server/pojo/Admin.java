@@ -29,6 +29,10 @@ import java.util.Collection;
 @ApiModel(value="Admin对象", description="")
 public class Admin implements Serializable, UserDetails {
 
+    /**
+     * Admin类实现了UserDetails接口
+     */
+
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "id")
