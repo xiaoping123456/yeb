@@ -2,11 +2,16 @@ package com.xiaoping.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xiaoping.server.config.security.JwtTokenUtil;
+import com.xiaoping.server.config.security.component.JwtTokenUtil;
 import com.xiaoping.server.mapper.AdminMapper;
+import com.xiaoping.server.mapper.AdminRoleMapper;
+import com.xiaoping.server.mapper.RoleMapper;
 import com.xiaoping.server.pojo.Admin;
+import com.xiaoping.server.pojo.AdminRole;
 import com.xiaoping.server.pojo.RespBean;
+import com.xiaoping.server.pojo.Role;
 import com.xiaoping.server.service.IAdminService;
+import com.xiaoping.server.utils.AdminUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,12 +19,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +47,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private AdminMapper adminMapper;
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private AdminRoleMapper adminRoleMapper;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -89,4 +99,64 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
                 .eq("enabled",true);
         return adminMapper.selectOne(queryWrapper);
     }
+
+    /**
+     * 根据用户id插叙角色列表
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Role> getRoles(Integer adminId) {
+        return roleMapper.getRoles(adminId);
+    }
+
+    /**
+     * 获取所有操作员
+     * @return
+     */
+    @Override
+    public List<Admin> getAllAdmins(String keywords) {
+        return adminMapper.getAllAdmins(AdminUtils.getCurrentAdmin().getId(),keywords);
+    }
+
+    /**
+     * 更新操作员角色
+     * @param adminId
+     * @param rids
+     * @return
+     */
+    @Override
+    @Transactional
+    public RespBean updateAdminRole(Integer adminId, Integer[] rids) {
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().eq("adminId",adminId));
+        Integer result = adminRoleMapper.addAdminRole(adminId,rids);
+        if (rids.length==result){
+            return RespBean.success("更新成功");
+        }
+        return RespBean.error("更新失败");
+    }
+
+    /**
+     * 更新用户密码
+     * @param oldPass
+     * @param pass
+     * @param adminId
+     * @return
+     */
+    @Override
+    public RespBean updateAdminPassword(String oldPass, String pass, Integer adminId) {
+        Admin admin = adminMapper.selectById(adminId);
+        //判断旧密码是否正确
+        if (passwordEncoder.matches(oldPass,admin.getPassword())){
+            admin.setPassword(passwordEncoder.encode(pass));
+            int result = adminMapper.updateById(admin);
+            if (result==1){
+                return RespBean.success("更新成功");
+            }
+            return RespBean.error("更新失败");
+        }
+        return RespBean.error("旧密码错误");
+    }
+
+
 }

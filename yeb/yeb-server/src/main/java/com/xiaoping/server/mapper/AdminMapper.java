@@ -2,6 +2,9 @@ package com.xiaoping.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaoping.server.pojo.Admin;
+import com.xiaoping.server.pojo.Menu;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.xiaoping.server.pojo.Admin;
  */
 public interface AdminMapper extends BaseMapper<Admin> {
 
+    /**
+     * 获取所有操作员
+     * @param id
+     * @param keywords
+     * @return
+     */
+    List<Admin> getAllAdmins(Integer id, String keywords);
 }

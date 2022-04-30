@@ -44,8 +44,14 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/yeb/yeb-generator/src/main/java");
+        //作者
         gc.setAuthor("xiaoping");
+        //是否打开目录
         gc.setOpen(false);
+        //xml开启BaseResultMap
+        gc.setBaseResultMap(true);
+        //xml开启BaseColumn
+        gc.setBaseColumnList(true);
         //实体属性 Swagger2 注解
          gc.setSwagger2(true);
         mpg.setGlobalConfig(gc);
@@ -62,7 +68,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
 //        pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.xiaoping.serve")
+        pc.setParent("com.xiaoping.server")
                 .setEntity("pojo")
                 .setMapper("mapper")
                 .setService("service")
@@ -134,7 +140,7 @@ public class CodeGenerator {
         // lombok模型
         strategy.setEntityLombokModel(true);
         // 生成RestController控制器
-        strategy.setRestControllerStyle(true);
+//        strategy.setRestControllerStyle(true);
         // 公共父类
 //        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
