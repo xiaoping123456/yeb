@@ -29,7 +29,7 @@ spring:
   rabbitmq:
     username: laowang
     password: Lw20010521
-    host: 49.233.53.29
+    host: 
     port: 5672
     # 消息确认回调
     publisher-confirm-type: correlated
@@ -95,9 +95,9 @@ aliyun:
     file:
       endpoint: oss-cn-beijing.aliyuncs.com
       # AccessKey
-      keyid: LTAI5tSA7L7ZoZ2K4dDuT2yQ
+      keyid: 
       # AccessSecret
-      keysecret: Adfic9Yuy80ZCpmHUGvlsWMANiE79U
+      keysecret: 
       # bucket名称
       bucketname: usual-xiaowang
       # bucket下的文件目录
