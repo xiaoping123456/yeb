@@ -112,7 +112,7 @@
             AND e.jobLevelId = j.id
             AND e.posId = pos.id
             <if test="null!=employee.name and ''!=employee.name ">
-                AND e.`name` LIKE CONCAT( '%', '王', '%' )
+                AND e.`name` LIKE CONCAT( '%', #{employee.name}, '%' )
             </if>
             <if test="null!=employee.politicId">
                 AND e.politicId = #{employee.politicId}

@@ -88,3 +88,17 @@ jwt:
   expiration: 604800
   # JWT荷载中拿到开头
   tokenHead: Bearer
+
+#OSS
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-beijing.aliyuncs.com
+      # AccessKey
+      keyid: LTAI5tSA7L7ZoZ2K4dDuT2yQ
+      # AccessSecret
+      keysecret: Adfic9Yuy80ZCpmHUGvlsWMANiE79U
+      # bucket名称
+      bucketname: usual-xiaowang
+      # bucket下的文件目录
+      filehost: yeb

@@ -111,8 +111,8 @@
     <!-- 查询所有菜单-->
     <select id="getAllMenus" resultMap="MenuWithChildren">
         SELECT
-            m1.id AS id1,
-            m1.`name` AS name1,
+            m1.id AS id,
+            m1.`name` AS name,
             m2.id AS id2,
             m2.`name` AS name2,
             m3.id AS id3,

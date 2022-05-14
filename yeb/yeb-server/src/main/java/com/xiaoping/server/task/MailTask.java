@@ -35,7 +35,7 @@ public class MailTask {
      * 邮件发送定时任务
      * 10s执行1次
      */
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void mailTask(){
         //获取所有投递中的消息 并且重试时间小于当前时间
         List<MailLog> list = mailLogService.list(new QueryWrapper<MailLog>()

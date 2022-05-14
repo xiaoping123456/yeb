@@ -5,6 +5,7 @@ import com.xiaoping.server.pojo.Admin;
 import com.xiaoping.server.pojo.Menu;
 import com.xiaoping.server.pojo.RespBean;
 import com.xiaoping.server.pojo.Role;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -64,4 +65,12 @@ public interface IAdminService extends IService<Admin> {
      * @return
      */
     RespBean updateAdminPassword(String oldPass, String pass, Integer adminId);
+
+    /**
+     * 上传头像
+     * @param file
+     * @param id
+     * @return
+     */
+    RespBean uploadHeadPic(MultipartFile file,Integer id);
 }
